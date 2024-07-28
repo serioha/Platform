@@ -32,6 +32,8 @@ function disc_assessment_activate() {
     // Create database tables
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
+
+    // Questions table
     $table_name = $wpdb->prefix . 'disc_questions';
     $sql = "CREATE TABLE $table_name (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -43,10 +45,31 @@ function disc_assessment_activate() {
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 
-    // Create other tables as needed
+    // Results table
+    $table_name = $wpdb->prefix . 'disc_results';
+    $sql = "CREATE TABLE $table_name (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id INT UNSIGNED NOT NULL,
+        test_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        scores TEXT NOT NULL,
+        styles TEXT NOT NULL,
+        interpretations TEXT NOT NULL
+    ) $charset_collate;";
+    dbDelta( $sql );
+
+    // Users table
+    $table_name = $wpdb->prefix . 'disc_users';
+    $sql = "CREATE TABLE $table_name (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id INT UNSIGNED NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) $charset_collate;";
+    dbDelta( $sql );
 }
 
 // Deactivation function
 function disc_assessment_deactivate() {
     // Remove database tables (optional)
+    // You can use the same SQL statements as in the activation function, but with DROP TABLE instead of CREATE TABLE.
 }
